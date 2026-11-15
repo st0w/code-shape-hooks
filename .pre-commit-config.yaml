@@ -1,0 +1,30 @@
+# Install once per clone:   pre-commit install
+# Run against everything:   pre-commit run --all-files
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: no-commit-to-branch
+        args: [--branch, main]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.4
+    hooks:
+      - id: ruff-check
+
+  # This repository's own hook, run from its working tree, so a change
+  # to the hook is checked by the changed hook.
+  - repo: local
+    hooks:
+      - id: check-file-length
+        name: file length (1,000 lines max, aim for 350)
+        entry: uv run --locked check-file-length
+        language: system
+        types_or: [python, pyi]
+        verbose: true

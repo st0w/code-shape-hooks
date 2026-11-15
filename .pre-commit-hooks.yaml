@@ -1,0 +1,25 @@
+- id: check-file-length
+  name: file length (1,000 lines max, aim for 350)
+  description: >-
+    Fails a code or test file over 1,000 lines and notes one over 350.
+    Files over the limit when it was adopted are listed in a shrink-only
+    baseline, code-shape-baseline.toml.
+  entry: check-file-length
+  language: python
+  types_or: [python, pyi, rust, shell, javascript, jsx, ts, tsx, go, java,
+             kotlin, swift, c, "c++", "c#", ruby, php, scala, lua, perl]
+  # A passing hook's output is hidden unless it is verbose, and the
+  # notes for files over the aim are output of a passing hook.
+  verbose: true
+  minimum_pre_commit_version: '2.9.0'
+
+- id: check-complexity
+  name: function complexity (10 max)
+  description: >-
+    Fails a function over McCabe complexity 10, measured by lizard, for
+    languages without a linter that enforces it (Python projects use
+    ruff's C901). Shrink-only baseline in code-shape-baseline.toml.
+  entry: check-complexity
+  language: python
+  types_or: [rust]
+  minimum_pre_commit_version: '2.9.0'

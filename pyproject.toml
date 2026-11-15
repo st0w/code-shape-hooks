@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "code-shape-hooks"
+version = "0.1.0"
+description = "pre-commit hooks that cap file length and function complexity, with a shrink-only baseline."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+# Exact pins, transitive ones included: pre-commit installs a hook's
+# dependencies with no lock file, so a loose range here would let a new
+# release change what the hook reports between two runs of the same tag.
+dependencies = [
+    "lizard==1.25.1",
+    "pathspec==1.1.1",
+    "pygments==2.21.0",
+]
+
+[project.scripts]
+check-file-length = "code_shape_hooks.file_length:main"
+check-complexity = "code_shape_hooks.complexity:main"
+
+[tool.setuptools]
+packages = ["code_shape_hooks"]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+ignore = ["Q001", "Q002"]
+select = [
+    "E", "W",  # pycodestyle errors, warnings
+    "F",       # pyflakes
+    "I",       # isort (imports)
+    "B",       # flake8-bugbear
+    "A",       # flake8-builtins
+    "Q",       # flake8-quotes
+    "C4",      # flake8-comprehensions
+    "C90",     # mccabe complexity
+    "UP",      # pyupgrade
+    "RUF",     # ruff-specific rules
+    "PLC0415", # import-outside-toplevel
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 72
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "single"
+multiline-quotes = "single"
+docstring-quotes = "single"
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.mypy]
+strict = true
+# lizard ships no type information; stubs/lizard.pyi declares the part
+# of its API these hooks use.
+mypy_path = "stubs"
+files = ["code_shape_hooks", "tests"]
