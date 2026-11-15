@@ -23,3 +23,16 @@
   language: python
   types_or: [rust]
   minimum_pre_commit_version: '2.9.0'
+
+- id: check-baseline-ratchet
+  name: baseline may shrink, never grow
+  description: >-
+    Fails when code-shape-baseline.toml raised an entry or added one
+    since the base revision: HEAD locally, $CODE_SHAPE_BASE_REF in CI.
+  entry: check-baseline-ratchet
+  language: python
+  # The baseline is compared as a whole, against git, whatever the
+  # commit touches.
+  always_run: true
+  pass_filenames: false
+  minimum_pre_commit_version: '2.9.0'
